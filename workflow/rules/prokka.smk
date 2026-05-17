@@ -20,10 +20,10 @@ rule Prokka:
         output_dir = prokka_dir
     shell:
         """
-        prokka -kingdom {params.kingdom} \
-        -outdir {output} \
-        -prefix {wildcards.sample} \
-        {input} --force -cpu {threads}
+        prokka --kingdom {params.kingdom} \
+        --outdir {output} \
+        --prefix {wildcards.sample} \
+        {input} --force --cpus {threads}
         
         """
 rule get_gff:
@@ -33,7 +33,7 @@ rule get_gff:
         os.path.join(gff_dir , "{sample}.gff")
     shell:
         """
-            cp {input}/{wildcards.sample}.gff {gff_dir}{wildcards.sample}".gff"
+            cp {input}/{wildcards.sample}.gff {gff_dir}{wildcards.sample}.gff
         """
 
 
