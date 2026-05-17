@@ -215,14 +215,13 @@ config = {'bactprep_path': BACTPREPPATH,
 
 config.update(get_output(MODULE))     
 config_file=NAME + "_config.yaml"
-with open(os.path.join(OUT,config_file), "w") as configfile:
-    yaml.dump(config,configfile)
-
 
 if __name__ == "__main__":
+    os.makedirs(OUT, exist_ok=True)
+    with open(os.path.join(OUT,config_file), "w") as configfile:
+        yaml.dump(config,configfile)
     os.chdir(OUT)
     shutil.copy(os.path.join(BACTPREPPATH, "workflow", "Snakefile"), OUT) 
     os.system ("snakemake --conda-frontend mamba --cores %d --use-conda --nolock --configfile %s --snakefile %s"%(THREAD,os.path.join(OUT,config_file), os.path.join(OUT,"Snakefile")))
-
 
 
