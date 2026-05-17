@@ -17,7 +17,7 @@ rule fastGear:
         os.path.join(fastGear_dir , "loci_fastGear_out","{locus}/{locus}.fa")
     shell:
         """
-        LD_LIBRARY_PATH={matlab_path}
+        export LD_LIBRARY_PATH={matlab_path}
         {fastGear_exe}run_fastGEAR.sh {mcr_path} {fastGear_dir}roary_pangenome_seq/{wildcards.locus}.fa.aln {fastGear_dir}loci_fastGear_out/{wildcards.locus}/{wildcards.locus}.mat {fastGear_params} 
         cp {fastGear_dir}roary_pangenome_seq/{wildcards.locus}.fa.aln {fastGear_dir}loci_fastGear_out/{wildcards.locus}/{wildcards.locus}.fa
         """
@@ -44,9 +44,9 @@ rule plot_pan_fastGear:
         tree=rules.core_gene_concatenation_ML_tree.output
     output:
         fastGear_dir + "plot_pangenome/pan_fastgear_plot_recombination_count.pdf"
-
     shell:
         """
+        mkdir -p {fastGear_dir}plot_pangenome/
         cd {fastGear_dir}plot_pangenome/
         python {WORKFLOW}scripts/post_fastGear.py \
         -i {fastGear_dir}loci_fastGear_out \
