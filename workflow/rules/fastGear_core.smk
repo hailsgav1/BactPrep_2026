@@ -119,7 +119,3 @@ rule core_genome_snps_ML_tree:
         """
             iqtree -bb 1000 -nt AUTO -m MFP -pre {params.prefix} -s {input.snps_aln} -fconst $(snp-sites -C {input.core_aln})
         """
-            iqtree -bb 1000 -nt AUTO -m MFP -pre {params.prefix} -s {input.snps_aln} -fconst $(snp-sites -C {input.core_aln})
-        """
-
-
