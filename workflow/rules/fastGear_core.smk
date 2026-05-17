@@ -19,7 +19,7 @@ rule fastGear_core:
         os.path.join(fastGear_core_dir , "core_loci_fastGear_out","{core_locus}/{core_locus}.fa")
     shell:
         """
-        LD_LIBRARY_PATH={matlab_path}
+        export LD_LIBRARY_PATH={matlab_path}
         {fastGear_exe}run_fastGEAR.sh {mcr_path} {fastGear_dir}roary_pangenome_seq/{wildcards.core_locus}.fa.aln {fastGear_core_dir}core_loci_fastGear_out/{wildcards.core_locus}/{wildcards.core_locus}.mat {fastGear_params}
         cp {fastGear_dir}roary_pangenome_seq/{wildcards.core_locus}.fa.aln {fastGear_core_dir}core_loci_fastGear_out/{wildcards.core_locus}/{wildcards.core_locus}.fa
         """
@@ -72,6 +72,7 @@ rule plot_core_fastGear:
         fastGear_core_dir + "plot_coregenome/core_fastgear_plot_recombination_count.pdf"
     shell:
         """
+        mkdir -p {fastGear_core_dir}plot_coregenome/
         cd {fastGear_core_dir}plot_coregenome/
         python {WORKFLOW}scripts/post_fastGear.py \
         -i {fastGear_core_dir}core_loci_fastGear_out \
@@ -115,6 +116,8 @@ rule core_genome_snps_ML_tree:
     params:
         prefix = os.path.join(fastGear_core_dir , "fastgear_iqtree" , str(project_prefix + "_core_mask_snp"))
     shell:
+        """
+            iqtree -bb 1000 -nt AUTO -m MFP -pre {params.prefix} -s {input.snps_aln} -fconst $(snp-sites -C {input.core_aln})
         """
             iqtree -bb 1000 -nt AUTO -m MFP -pre {params.prefix} -s {input.snps_aln} -fconst $(snp-sites -C {input.core_aln})
         """
