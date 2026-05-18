@@ -54,7 +54,7 @@ mamba install -c conda-forge -c bioconda \
 source INSTALL.sh
 ```
 
-    _* this name can change base on your project_
+_* this name can change base on your project_
 
  - - 4.1) if used the pipeline before or has matlab runtime R2016b (MCR) **AND** fastGear executable installed on the machine, use flag ```--mcr_path``` and ```--fastgear_exe``` to specify the absolute path to MCR and fasrGear executable. IF these two software were installed during previous use of BactPrep. you can find them in the ```resources``` folder from the previous download (please see example #6 below for detail).
     
