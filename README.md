@@ -36,17 +36,22 @@ This pipeline is written specifically for annotating the **bacteria whole genome
 
 4) If first time using the pipeline
     ```
-    cd BactPrep 
+cd BactPrep 
 
-    conda create -n BactPrep python=3 mamba -c conda-forge -y
+conda create -n BactPrep python=3.11 mamba -c conda-forge -y
 
-    conda activate BactPrep 
+conda activate BactPrep 
 
-    # if this step is not complete, set channel priirity in conda env to flexible with command: 
-    # conda config --set channel_priority true
-    mamba install --file workflow/env/install.yaml  
+# Set conda channel priority to flexible (required for Roary installation)
+conda config --set channel_priority flexible
 
-    source INSTALL.sh 
+pip install pyyaml biopython
+
+mamba install -c conda-forge -c bioconda \
+  biopython unzip tar tree r-dplyr pyyaml matplotlib zenodo_get \
+  bioconductor-ggtree bioconductor-treeio snakemake -y
+
+source INSTALL.sh
 
     ```
     _* this name can change base on your project_
