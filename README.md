@@ -35,7 +35,7 @@ This pipeline is written specifically for annotating the **bacteria whole genome
     
 
 4) If first time using the pipeline
-    ```
+```
 cd BactPrep 
 
 conda create -n BactPrep python=3.11 mamba -c conda-forge -y
@@ -52,7 +52,7 @@ mamba install -c conda-forge -c bioconda \
   bioconductor-ggtree bioconductor-treeio snakemake -y
 
 source INSTALL.sh
-
+```
     ```
     _* this name can change base on your project_
 
