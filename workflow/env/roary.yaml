@@ -3,5 +3,6 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - roary=3.13.0
-  - perl=5.32
+  - roary=3.12.0=pl526h516909a_0
+  - perl-exception-class=1.40=pl526_0
+  - perl-class-data-inheritable=0.09=pl526_0
