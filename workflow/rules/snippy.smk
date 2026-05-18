@@ -1,4 +1,3 @@
-
 rule snippy_multi:
     input:
         os.path.join(asm_dir , "{sample}.fna")
@@ -24,7 +23,7 @@ rule snippy_core:
         mask=" --mask " + phage if phage != "" else ""
     shell:
         """
-        snippy-core{params.mask} {input} --prefix {snippy_dir}core
+        snippy-core --ref {reference}{params.mask} {input} --prefix {snippy_dir}core
         """
 
 rule clean_snippy_core:
