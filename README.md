@@ -48,9 +48,9 @@ source INSTALL.sh
  - 4.1) If you have used the pipeline before or already have matlab runtime R2016b (MCR) **AND** fastGear executable installed, use flags `--mcr_path` and `--fastgear_exe` to specify the absolute path to MCR and fastGear executable. You can find them in the `resources` folder from a previous download (see FAQ #6 for details).
 
 5) You are now good to go!
-python start_analysis.py ALL(coreGen/wgsRecomb/panRecomb)
-6) After running all your analysis, deactivate the env
-conda deactivate
+``python start_analysis.py ALL(coreGen/wgsRecomb/panRecomb)``
+7) After running all your analysis, deactivate the env
+``conda deactivate``
 ## Running on HPC (SLURM clusters)
 
 A SLURM submission script is included in the repo (`run_bactprep.sh`) for running BactPrep on HPC clusters. Edit the user settings at the top of the script before submitting:
