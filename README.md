@@ -125,6 +125,7 @@ gunzip GCF_000026665.1_ASM2666v1_genomic.fna.gz
 usage: start_analysis.py MODULE [options]
 Please always specify the program to use in the first argument, or the whole pipeline will attempt to run
 positional arguments:
+
 {ALL,wgsRecomb,coreGen,coreRecomb,panRecomb,geneRecomb}
 Specify the module you would like to run
 optional arguments:
