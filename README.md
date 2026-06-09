@@ -20,27 +20,27 @@ This pipeline is written specifically for annotating the **bacteria whole genome
 1) Install conda (Python3) in your local computer or on the computing cluster. Detailed instructions can be found [here](https://docs.conda.io/en/latest/miniconda.html)
 
 2) Make a working directory
-mkdir {BactPrep_dir}
-cd {BactPrep_dir}
+`mkdir {BactPrep_dir}
+cd {BactPrep_dir}`
 _* this name can change based on your project_
 
 3) **Clone the repository into local working directory**
-git clone https://github.com/rx32940/BactPrep.git
+`git clone https://github.com/rx32940/BactPrep.git`
 4) If first time using the pipeline
-cd BactPrep
+`cd BactPrep`
 
-conda create -n BactPrep python=3.11 mamba -c conda-forge -y
+`conda create -n BactPrep python=3.11 mamba -c conda-forge -y`
 
-conda activate BactPrep
+`conda activate BactPrep`
 
 # Set conda channel priority to flexible (required for Roary installation)
-conda config --set channel_priority flexible
+`conda config --set channel_priority flexible`
 
-pip install pyyaml biopython
+`pip install pyyaml biopython`
 
-mamba install -c conda-forge -c bioconda \
+`mamba install -c conda-forge -c bioconda \
   biopython unzip tar tree r-dplyr pyyaml matplotlib zenodo_get \
-  bioconductor-ggtree bioconductor-treeio snakemake -y
+  bioconductor-ggtree bioconductor-treeio snakemake -y`
 
 source INSTALL.sh
 > **Note:** Python 3.11 is required. Python 3.12+ will cause compatibility issues with Snakemake and other dependencies.
@@ -68,8 +68,8 @@ THREADS=16                             # number of threads (match --cpus-per-tas
 
 Then submit:
 
-mkdir -p logs
-sbatch run_bactprep.sh
+`mkdir -p logs
+sbatch run_bactprep.sh`
 
 > **Note:** Make sure to set `#SBATCH --account` to your HPC account name before submitting.
 
@@ -86,16 +86,16 @@ sbatch run_bactprep.sh
 
 The sample dataset can be downloaded to your work directory by:
 
-mkdir -p $INPATH/assemblies
+`mkdir -p $INPATH/assemblies
 cd $INPATH/assemblies
 zenodo_get -d 10.5281/zenodo.5603335
-rm $INPATH/assemblies/md5sums*
+rm $INPATH/assemblies/md5sums*`
 
 **Reference genome** for _Streptococcus pneumoniae_ PMEN1 can be downloaded from NCBI: [Streptococcus pneumoniae ATCC 700669 (firmicutes)](https://www.ncbi.nlm.nih.gov/assembly/GCF_000026665.1/)
 
-cd $INPATH/
+`cd $INPATH/
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/026/665/GCF_000026665.1_ASM2666v1/GCF_000026665.1_ASM2666v1_genomic.fna.gz
-gunzip GCF_000026665.1_ASM2666v1_genomic.fna.gz
+gunzip GCF_000026665.1_ASM2666v1_genomic.fna.gz`
 
 ## Instruction
 
@@ -122,11 +122,11 @@ gunzip GCF_000026665.1_ASM2666v1_genomic.fna.gz
 - recombinations are detected for each gene individually
 - will also reconstruct phylogeny for the dataset based on the core clonal SNPs
 
-usage: start_analysis.py MODULE [options]
+`usage: start_analysis.py MODULE [options]
 Please always specify the program to use in the first argument, or the whole pipeline will attempt to run
-positional arguments:
+positional arguments:`
 
-{ALL,wgsRecomb,coreGen,coreRecomb,panRecomb,geneRecomb}
+`{ALL,wgsRecomb,coreGen,coreRecomb,panRecomb,geneRecomb}
 Specify the module you would like to run
 optional arguments:
 -h, --help            show this help message and exit
@@ -157,7 +157,7 @@ path to fastGear params
 arguments for geneRecomb module:
 -n , --alignment      input alignment (either -n/-fl is required for geneRecomb module)
 -fl , --alnlist       input alignment list with path to gene alignments (either -n/-fl is required for geneRecomb module)
-Enjoy the program! :)
+Enjoy the program! :)`
 
 **Run**: `python start_analysis.py ALL(coreGen/wgsRecomb/panRecomb)`
 
@@ -173,19 +173,19 @@ If you would like to run "wgsRecomb", "coreGen", and "coreRecomb" modules all to
 
 EXAMPLE:
 
-python start_analysis.py ALL -p PMEN1.dated 
+`python start_analysis.py ALL -p PMEN1.dated 
 -o $OUTPATH 
 -i $INPATH/assemblies 
--r $INPATH/GCF_000026665.1_ASM2666v1_genomic.fna
+-r $INPATH/GCF_000026665.1_ASM2666v1_genomic.fna`
 
 **1.1)** If you already have gff files from a previous analysis, **gff dir** can be used as input for the "coreGen" module. This saves a lot of time:
 
-python start_analysis.py ALL -p PMEN1.dated 
+`python start_analysis.py ALL -p PMEN1.dated 
 -o $OUTPATH 
 -t 10 
 -g $INPATH/gff 
 --mcr_path {path_to_previous_BactPrep_folder}/resources/mcr 
---fastgear_exe /home/user/SOFTWARE/fastGEARpackageLinux64bit
+--fastgear_exe /home/user/SOFTWARE/fastGEARpackageLinux64bit`
 
 **2) Obtain Annotated Outputs**
 
@@ -203,14 +203,14 @@ ERS004775 | HK P38 | 2000 | China
 
 EXAMPLE:
 
-python start_analysis.py ALL -p PMEN1.dated 
+`python start_analysis.py ALL -p PMEN1.dated 
 -o $OUTPATH 
 -i $INPATH/assemblies 
 -r $INPATH/GCF_000026665.1_ASM2666v1_genomic.fna 
 -M 
 -a $INPATH/PMEN1.dated.metadata.csv 
 -s 1 
--m Year,Country
+-m Year,Country`
 
 **3) IF you would only like to run "wgsRecomb"**
 
@@ -219,10 +219,10 @@ A reference genome must be provided. "wgsRecomb" will call SNPs from the referen
 EXAMPLE:
 
 
-python start_analysis.py wgsRecomb -p PMEN1.dated 
+`python start_analysis.py wgsRecomb -p PMEN1.dated 
 -o $OUTPATH 
 -i $INPATH/assemblies 
--r $INPATH/GCF_000026665.1_ASM2666v1_genomic.fna
+-r $INPATH/GCF_000026665.1_ASM2666v1_genomic.fna`
 
 **4) IF you would only like to run "coreGen"**
 
@@ -230,9 +230,9 @@ All input WGS assemblies will be annotated by **Prokka**. Using Prokka's gene an
 
 EXAMPLE:
 
-python start_analysis.py coreGen -p PMEN1.dated 
+`python start_analysis.py coreGen -p PMEN1.dated 
 -o $OUTPATH 
--i $INPATH/assemblies
+-i $INPATH/assemblies`
 
 **5) IF you would only like to run "coreRecomb"**
 
@@ -240,7 +240,7 @@ The "coreGen" module will run first. "coreRecomb" will identify homologous recom
 
 EXAMPLE:
 
-python start_analysis.py coreRecomb 
+`python start_analysis.py coreRecomb 
 -p PMEN1.dated 
 -o $WORKPATH 
 -i $WORKPATH/assemblies 
@@ -248,7 +248,7 @@ python start_analysis.py coreRecomb
 -t 10 
 -M 
 -a $WORKPATH/PMEN1.dated.metadata.csv 
--m Year,Country
+-m Year,Country`
 
 **6) IF matlab runtime (MCR) version R2016a is already installed or this is not the first time running this pipeline**
 
@@ -256,7 +256,7 @@ Use flags `--mcr_path` and `--fastgear_exe` to avoid reinstalling these dependen
 
 EXAMPLE:
 
-conda create -n BactPrep python=3.11 mamba -c conda-forge -y
+`conda create -n BactPrep python=3.11 mamba -c conda-forge -y
 conda activate BactPrep
 conda config --set channel_priority flexible
 pip install pyyaml biopython
@@ -268,7 +268,7 @@ python start_analysis.py panRecomb -p PMEN1.dated_fastGear_pan
 -t 10 
 -i $INPATH/assemblies 
 --mcr_path {path_to_previous_BactPrep_folder}/resources/mcr/v901 
---fastgear_exe {path_to_previous_BactPrep_folder}/fastGEARpackageLinux64bit
+--fastgear_exe {path_to_previous_BactPrep_folder}/fastGEARpackageLinux64bit`
 
 **7) IF you would like to inform wgsRecomb (Gubbins) about an already known phage region**
 
@@ -276,12 +276,12 @@ Use `-v` or `--phage` to provide the phage region in a BED file.
 
 EXAMPLE:
 
-python start_analysis.py wgsRecomb 
+`python start_analysis.py wgsRecomb 
 -p PMEN1.dated 
 -o $WORKPATH 
 -i $WORKPATH/assemblies 
 -r $WORKPATH/GCF_000026665.1_ASM2666v1_genomic.fna 
--v $WORKPATH/phage_region.bed
+-v $WORKPATH/phage_region.bed`
 
 **8) IF additional arguments need to be specified for Roary and Gubbins**
 
@@ -291,12 +291,12 @@ Additional Roary and Gubbins arguments can be added using the `-R` or `-G` flags
 
 EXAMPLE:
 
-python start_analysis.py ALL 
+`python start_analysis.py ALL 
 -p PMEN1.dated 
 -o $WORKPATH 
 -g $WORKPATH/gff 
 -r $WORKPATH/GCF_000026665.1_ASM2666v1_genomic.fna 
--R " -r -y -iv 1.5"
+-R " -r -y -iv 1.5"`
 
 **9) If you have trouble installing fastGear with `INSTALL.sh`**
 
@@ -305,7 +305,7 @@ Follow the instructions below for manual installation.
 Download and install fastGear executable:
 1. Change directory to: `{absolute_path_to_BactPrep}/resources/`
 2. Download fastGear:
-wget --no-check-certificate https://users.ics.aalto.fi/~pemartti/fastGEAR/fastGEARpackageLinux64bit.tar.gz -P {absolute_path_to_BactPrep}/resources
+`wget --no-check-certificate https://users.ics.aalto.fi/~pemartti/fastGEAR/fastGEARpackageLinux64bit.tar.gz -P {absolute_path_to_BactPrep}/resources`
 
 3. Unzip: `tar -zvxf fastGEARpackageLinux64bit.tar.gz`
 
@@ -317,4 +317,4 @@ wget https://users.ics.aalto.fi/~pemartti/fastGEAR/MCRInstallerLinux64bit.zip -P
 4. Install:
 ./install -destinationFolder {absolute_path_to_BactPrep}/resources/mcr/ -mode silent -agreeToLicense yes
 If you already have MCR (R2016a) installed, specify the path with `--mcr_path`:
---mcr_path {absolute_path_to_BactPrep}/resources/mcr/
+`--mcr_path {absolute_path_to_BactPrep}/resources/mcr/`
