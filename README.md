@@ -125,40 +125,53 @@ gunzip GCF_000026665.1_ASM2666v1_genomic.fna.gz`
 `usage: start_analysis.py MODULE [options]
 Please always specify the program to use in the first argument, or the whole pipeline will attempt to run
 positional arguments:`
+```
+usage: start_analysis.py MODULE [options]
 
-`{ALL,wgsRecomb,coreGen,coreRecomb,panRecomb,geneRecomb}
-Specify the module you would like to run
+Please always specify the program to use in the first argument, or the whole pipeline will attemp to run
+
+positional arguments:
+  {ALL,wgsRecomb,coreGen,coreRecomb,panRecomb,geneRecomb}
+                        Specify the module you would like to run
+
 optional arguments:
--h, --help            show this help message and exit
-general arguments:
--i , --input          path to input dir with assemblies
--p , --name           provide name prefix for the output files
--t , --thread         num of threads
--o , --output         path to the output directory
-arguments for if you would like to add metadata to output:
--M, --addMetadata     must have the flag specify if want to allow annotation
--a , --annotate       path to a csv file containing sample metadata
--s , --sample         integer indicates which column the sample name is in the metadata csv file
--m , --metadata       metadata chosen to annotate ML tree/alignment after the sample name
-arguments for wgsRecomb module:
--r , --ref            reference (required for wgsRecomb module)
--v , --phage          phage region identified for masking (bed file)
--G , --gubbins        any additional Gubbins arguments (please refer to Gubbins manual)
-arguments for coreGen module:
--g , --gff            path to input dir with gff (this can replace input assemblies dir in coreGen module. Must be gff3 files)
--c , --core           define core gene definition by percentage for coreGen module (default=99)
--k , --kingdom        specify the kingdom of input assemblies for genome annotation (default=Bacteria)
--R , --roary          any additional roary arguments (please refer to Roary manual)
-arguments for all three fastGear modules (coreRecomb, panRecomb, geneRecomb):
---mcr_path            path to mcr runtime (need to install before use any of the fastGear module)
---fastgear_exe        path to the executable of fastGear
---fg , --fastgear_param
-path to fastGear params
-arguments for geneRecomb module:
--n , --alignment      input alignment (either -n/-fl is required for geneRecomb module)
--fl , --alnlist       input alignment list with path to gene alignments (either -n/-fl is required for geneRecomb module)
-Enjoy the program! :)`
+  -h, --help            show this help message and exit
 
+general arguments:
+  -i , --input          path to input dir with assemblies
+  -p , --name           provide name prefix for the output files
+  -t , --thread         num of threads
+  -o , --output         path to the output directory
+
+arguments for if you would like to add metadata to output:
+  -M, --addMetadata     must have the flag specify if want to allow annotation
+  -a , --annotate       path to a csv file containing sample metadata
+  -s , --sample         integer indicates which column the sample name is in the metadata csv file
+  -m , --metadata       metadata chosen to annotate ML tree/alignment after the sample name
+
+arguments for wgsRecomb module:
+  -r , --ref            reference (required for wgsRecomb module)
+  -v , --phage          phage region identified for masking (bed file)
+  -G , --gubbins        any additional Gubbins arguments (please refer to Gubbins manual)
+
+arguments for coreGen module:
+  -g , --gff            path to input dir with gff (this can replace input assemblies dir in coreGen module Must be gff3 files)
+  -c , --core           define core gene definition by percentage for coreGen module (default=99)
+  -k , --kingdom        specify the kingom of input assemlies for genome annotation (default=Bacteria)
+  -R , --roary          any additional roary arguments (please refer to Roary manual)
+
+arguments for all three fastGear modules (coreRecomb, panRecomb, geneRecomb):
+  --mcr_path            path to mcr runtime (need to install before use any of the fastGear module
+  --fastgear_exe        path to the excutable of fastGear
+  --fg , --fastgear_param 
+                        path to fastGear params
+
+arguments for geneRecomb module:
+  -n , --alignment      input alignment (either -n/-fl is required for geneRecomb module)
+  -fl , --alnlist       input alignment list with path to gene alignments (either -n/-fl is required for geneRecomb module)
+
+Enjoy the program! :)`
+```
 **Run**: `python start_analysis.py ALL(coreGen/wgsRecomb/panRecomb)`
 
 ## Output Files
