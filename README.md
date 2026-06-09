@@ -57,7 +57,7 @@ A SLURM submission script is included in the repo (`run_bactprep.sh`) for runnin
 
 ```bash
 # ====== USER SETTINGS - edit these ======
-BACTPREP_DIR=/path/to/BactPrep        # path to cloned BactPrep directory
+BACTPREP_DIR=/path/to/BactPrep         # path to cloned BactPrep directory
 OUTPUT=/path/to/your/output            # path to output directory
 INPUT=/path/to/your/assemblies         # path to directory with genome assemblies
 REF=/path/to/your/reference.fna        # path to reference genome
