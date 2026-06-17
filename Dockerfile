@@ -9,10 +9,11 @@ WORKDIR /BactPrep
 # Copy the entire repo into the container
 COPY . .
 
-# Set conda channel priority and add defaults last
-RUN conda config --set channel_priority flexible && \
-    conda config --remove channels defaults || true && \
-    conda config --append channels defaults
+# Install Docker to pull prokka container
+RUN apt-get update && apt-get install -y docker.io
+
+# Set conda channel priority
+RUN conda config --set channel_priority flexible
 
 # Install Python and base tools
 RUN mamba install -c conda-forge -c bioconda \
@@ -23,9 +24,10 @@ RUN mamba install -c conda-forge -c bioconda \
     biopython unzip tar tree r-dplyr pyyaml matplotlib zenodo_get \
     bioconductor-ggtree bioconductor-treeio -y
 
-# Install prokka using conda instead of mamba
-RUN conda install -c conda-forge -c bioconda -c defaults \
-    prokka --no-channel-priority -y
+# Install prokka via pip workaround
+RUN mamba install -c conda-forge -c bioconda \
+    perl=5.22 parallel prodigal blast tbl2asn -y && \
+    mamba install -c bioconda prokka -y
 
 # Install SNP tools
 RUN mamba install -c conda-forge -c bioconda \
