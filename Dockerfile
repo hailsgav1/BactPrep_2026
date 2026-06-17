@@ -3,13 +3,17 @@ FROM staphb/prokka:latest
 LABEL maintainer="biowizardhailey"
 LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
 
-# Install conda
-RUN apt-get update && apt-get install -y wget && \
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
-    bash miniconda.sh -b -p /opt/conda && \
-    rm miniconda.sh
+# Install micromamba
+RUN apt-get update && apt-get install -y wget bzip2 && \
+    wget -qO- https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/micromamba && \
+    mv bin/micromamba /usr/local/bin/micromamba
 
-ENV PATH="/opt/conda/bin:$PATH"
+ENV MAMBA_ROOT_PREFIX="/opt/conda"
+ENV PATH="/opt/conda/bin:/usr/local/bin:$PATH"
+
+# Initialize micromamba
+RUN micromamba shell init -s bash && \
+    micromamba config set channel_priority flexible
 
 # Set working directory
 WORKDIR /BactPrep
@@ -17,36 +21,12 @@ WORKDIR /BactPrep
 # Copy the entire repo into the container
 COPY . .
 
-# Set conda channel priority
-RUN conda config --set channel_priority flexible
-
-# Install mamba
-RUN conda install -c conda-forge mamba -y
-
-# Install Python and base tools
-RUN mamba install -c conda-forge -c bioconda \
-    python=3.11 snakemake -y
-
-# Install base dependencies
-RUN mamba install -c conda-forge -c bioconda \
-    biopython unzip tar tree r-dplyr pyyaml matplotlib zenodo_get \
+# Install all tools
+RUN micromamba install -c conda-forge -c bioconda \
+    python=3.11 snakemake biopython pyyaml \
+    snippy gubbins iqtree snp-sites bedtools seqkit roary \
+    unzip tar tree r-dplyr matplotlib zenodo_get \
     bioconductor-ggtree bioconductor-treeio -y
-
-# Install SNP tools
-RUN mamba install -c conda-forge -c bioconda \
-    snippy -y
-
-# Install recombination tools
-RUN mamba install -c conda-forge -c bioconda \
-    gubbins -y
-
-# Install tree tools
-RUN mamba install -c conda-forge -c bioconda \
-    iqtree snp-sites bedtools seqkit -y
-
-# Install pangenome tools
-RUN mamba install -c conda-forge -c bioconda \
-    roary -y
 
 RUN pip install pyyaml biopython
 
