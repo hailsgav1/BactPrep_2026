@@ -23,7 +23,7 @@ RUN mamba install -c conda-forge -c bioconda \
 
 # Install annotation tools
 RUN mamba install -c conda-forge -c bioconda \
-    prokka=1.14.6 -y
+    prokka -y
 
 # Install SNP tools
 RUN mamba install -c conda-forge -c bioconda \
@@ -31,7 +31,7 @@ RUN mamba install -c conda-forge -c bioconda \
 
 # Install recombination tools
 RUN mamba install -c conda-forge -c bioconda \
-    gubbins=2.4.1 -y
+    gubbins -y
 
 # Install tree tools
 RUN mamba install -c conda-forge -c bioconda \
@@ -39,7 +39,7 @@ RUN mamba install -c conda-forge -c bioconda \
 
 # Install pangenome tools
 RUN mamba install -c conda-forge -c bioconda \
-    roary=3.13.0 -y
+    roary -y
 
 RUN pip install pyyaml biopython
 
