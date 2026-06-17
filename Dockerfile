@@ -1,18 +1,19 @@
-FROM quay.io/biocontainers/prokka:1.14.6--hdfd78af_5
+FROM condaforge/miniconda3:latest
 
 LABEL maintainer="biowizardhailey"
 LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
 
-# Install wget and curl
-RUN apt-get update && apt-get install -y wget curl bzip2 && \
-    apt-get clean
+# Install mamba and prokka in its own environment
+RUN conda install -y -c conda-forge mamba && \
+    mamba create -y -n prokka_env \
+    --override-channels \
+    -c conda-forge \
+    -c bioconda \
+    prokka bioperl perl-xml-simple && \
+    conda clean -afy
 
-# Install Miniconda with Python 3.11
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py311_23.5.2-0-Linux-x86_64.sh -O miniconda.sh && \
-    bash miniconda.sh -b -p /opt/conda && \
-    rm miniconda.sh
-
-ENV PATH="/opt/conda/bin:$PATH"
+# Add prokka to PATH
+ENV PATH="/opt/conda/envs/prokka_env/bin:$PATH"
 
 # Set conda channel priority flexible
 RUN conda config --set channel_priority flexible
