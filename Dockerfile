@@ -21,9 +21,9 @@ RUN mamba install -c conda-forge -c bioconda \
     biopython unzip tar tree r-dplyr pyyaml matplotlib zenodo_get \
     bioconductor-ggtree bioconductor-treeio -y
 
-# Install annotation tools
+# Install annotation tools with perl pin
 RUN mamba install -c conda-forge -c bioconda \
-    prokka -y
+    perl=5.32 prokka -y
 
 # Install SNP tools
 RUN mamba install -c conda-forge -c bioconda \
