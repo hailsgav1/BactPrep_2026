@@ -12,12 +12,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Micromamba
-RUN curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C /usr/local/bin --strip-components=1 bin/micromamba
+RUN curl -Ls https://mamba.pm | tar -xj -C /usr/local/bin --strip-components=1 bin/micromamba
 
-# Initialize micromamba
-RUN micromamba shell init -s bash -p /opt/conda
-
-# Install Prokka in its own environment
+# Install Prokka environment
 RUN micromamba create -y -p /opt/conda/envs/prokka_env \
     --override-channels \
     -c conda-forge \
@@ -25,7 +22,7 @@ RUN micromamba create -y -p /opt/conda/envs/prokka_env \
     prokka=1.14.6 bioperl perl-xml-simple \
     && micromamba clean -afy
 
-# Install base BactPrep dependencies
+# Install BactPrep base environment
 RUN micromamba create -y -p /opt/conda/envs/bactprep \
     --override-channels \
     -c conda-forge \
