@@ -1,7 +1,15 @@
-FROM condaforge/mambaforge:latest
+FROM staphb/prokka:latest
 
 LABEL maintainer="biowizardhailey"
 LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
+
+# Install conda
+RUN apt-get update && apt-get install -y wget && \
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
+    bash miniconda.sh -b -p /opt/conda && \
+    rm miniconda.sh
+
+ENV PATH="/opt/conda/bin:$PATH"
 
 # Set working directory
 WORKDIR /BactPrep
@@ -9,11 +17,11 @@ WORKDIR /BactPrep
 # Copy the entire repo into the container
 COPY . .
 
-# Install Docker to pull prokka container
-RUN apt-get update && apt-get install -y docker.io
-
 # Set conda channel priority
 RUN conda config --set channel_priority flexible
+
+# Install mamba
+RUN conda install -c conda-forge mamba -y
 
 # Install Python and base tools
 RUN mamba install -c conda-forge -c bioconda \
@@ -23,11 +31,6 @@ RUN mamba install -c conda-forge -c bioconda \
 RUN mamba install -c conda-forge -c bioconda \
     biopython unzip tar tree r-dplyr pyyaml matplotlib zenodo_get \
     bioconductor-ggtree bioconductor-treeio -y
-
-# Install prokka via pip workaround
-RUN mamba install -c conda-forge -c bioconda \
-    perl=5.22 parallel prodigal blast tbl2asn -y && \
-    mamba install -c bioconda prokka -y
 
 # Install SNP tools
 RUN mamba install -c conda-forge -c bioconda \
