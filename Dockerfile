@@ -9,14 +9,21 @@ WORKDIR /BactPrep
 # Copy the entire repo into the container
 COPY . .
 
-# Set conda channel priority flexible (required for Roary and other tools)
+# Set conda channel priority flexible
 RUN conda config --set channel_priority flexible
 
-# Install all base dependencies into base environment
+# Install base dependencies
 RUN conda install -c conda-forge -c bioconda \
     python=3.11 \
     biopython unzip tar tree r-dplyr pyyaml matplotlib zenodo_get \
     bioconductor-ggtree bioconductor-treeio snakemake -y
+
+# Install Prokka with strict channel ordering and bioperl
+RUN conda create -y -n prokka_env -c conda-forge -c bioconda -c defaults \
+    prokka bioperl perl-xml-simple
+
+# Handle tbl2asn expiration
+ENV tbl2asn="-no-warn"
 
 RUN pip install pyyaml biopython
 
