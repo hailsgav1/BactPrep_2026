@@ -1,19 +1,7 @@
-FROM staphb/prokka:latest
+FROM continuumio/miniconda3:latest
 
 LABEL maintainer="biowizardhailey"
 LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
-
-# Install micromamba
-RUN apt-get update && apt-get install -y wget bzip2 && \
-    wget -qO- https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/micromamba && \
-    mv bin/micromamba /usr/local/bin/micromamba
-
-ENV MAMBA_ROOT_PREFIX="/opt/conda"
-ENV PATH="/opt/conda/bin:/usr/local/bin:$PATH"
-
-# Initialize micromamba
-RUN micromamba shell init -s bash && \
-    micromamba config set channel_priority flexible
 
 # Set working directory
 WORKDIR /BactPrep
@@ -21,12 +9,14 @@ WORKDIR /BactPrep
 # Copy the entire repo into the container
 COPY . .
 
-# Install all tools
-RUN micromamba install -c conda-forge -c bioconda \
-    python=3.11 snakemake biopython pyyaml \
-    snippy gubbins iqtree snp-sites bedtools seqkit roary \
-    unzip tar tree r-dplyr matplotlib zenodo_get \
-    bioconductor-ggtree bioconductor-treeio -y
+# Set conda channel priority flexible (required for Roary and other tools)
+RUN conda config --set channel_priority flexible
+
+# Install all base dependencies into base environment
+RUN conda install -c conda-forge -c bioconda \
+    python=3.11 \
+    biopython unzip tar tree r-dplyr pyyaml matplotlib zenodo_get \
+    bioconductor-ggtree bioconductor-treeio snakemake -y
 
 RUN pip install pyyaml biopython
 
