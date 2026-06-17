@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:latest
+FROM condaforge/mambaforge:latest
 
 LABEL maintainer="biowizardhailey"
 LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
@@ -12,22 +12,34 @@ COPY . .
 # Set conda channel priority
 RUN conda config --set channel_priority flexible
 
-# Install all base dependencies into base environment
-RUN conda install -c conda-forge -c bioconda \
-    python=3.11 \
-    biopython unzip tar tree r-dplyr pyyaml matplotlib zenodo_get \
-    bioconductor-ggtree bioconductor-treeio snakemake -y
+# Install Python and base tools
+RUN mamba install -c conda-forge -c bioconda \
+    python=3.11 snakemake -y
 
-# Install bioinformatics tools
-RUN conda install -c conda-forge -c bioconda \
-    prokka=1.14.6 \
-    snippy=4.6.0 \
-    gubbins=2.4.1 \
-    iqtree \
-    snp-sites \
-    bedtools \
-    roary=3.13.0 \
-    seqkit -y
+# Install base dependencies
+RUN mamba install -c conda-forge -c bioconda \
+    biopython unzip tar tree r-dplyr pyyaml matplotlib zenodo_get \
+    bioconductor-ggtree bioconductor-treeio -y
+
+# Install annotation tools
+RUN mamba install -c conda-forge -c bioconda \
+    prokka=1.14.6 -y
+
+# Install SNP tools
+RUN mamba install -c conda-forge -c bioconda \
+    snippy -y
+
+# Install recombination tools
+RUN mamba install -c conda-forge -c bioconda \
+    gubbins=2.4.1 -y
+
+# Install tree tools
+RUN mamba install -c conda-forge -c bioconda \
+    iqtree snp-sites bedtools seqkit -y
+
+# Install pangenome tools
+RUN mamba install -c conda-forge -c bioconda \
+    roary=3.13.0 -y
 
 RUN pip install pyyaml biopython
 
