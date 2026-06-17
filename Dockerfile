@@ -1,10 +1,11 @@
-FROM condaforge/miniconda3:latest
+FROM continuumio/miniconda3:latest
 
 LABEL maintainer="biowizardhailey"
 LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
 
-# Install mamba and prokka in its own environment
-RUN conda install -y -c conda-forge mamba && \
+# Update conda, install mamba, and build prokka environment
+RUN conda update -n base -c defaults conda -y && \
+    conda install -y -c conda-forge mamba && \
     mamba create -y -n prokka_env \
     --override-channels \
     -c conda-forge \
