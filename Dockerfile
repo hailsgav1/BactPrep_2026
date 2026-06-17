@@ -9,8 +9,10 @@ WORKDIR /BactPrep
 # Copy the entire repo into the container
 COPY . .
 
-# Set conda channel priority
-RUN conda config --set channel_priority flexible
+# Set conda channel priority and add defaults last
+RUN conda config --set channel_priority flexible && \
+    conda config --remove channels defaults || true && \
+    conda config --append channels defaults
 
 # Install Python and base tools
 RUN mamba install -c conda-forge -c bioconda \
@@ -21,9 +23,9 @@ RUN mamba install -c conda-forge -c bioconda \
     biopython unzip tar tree r-dplyr pyyaml matplotlib zenodo_get \
     bioconductor-ggtree bioconductor-treeio -y
 
-# Install annotation tools with perl pin
-RUN mamba install -c conda-forge -c bioconda \
-    perl=5.32 prokka -y
+# Install prokka using conda instead of mamba
+RUN conda install -c conda-forge -c bioconda -c defaults \
+    prokka --no-channel-priority -y
 
 # Install SNP tools
 RUN mamba install -c conda-forge -c bioconda \
