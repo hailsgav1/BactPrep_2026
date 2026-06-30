@@ -25,16 +25,17 @@ RUN conda create -n prokka_env -c conda-forge -c bioconda prokka -y
 RUN cd /opt/conda/envs/prokka_env/lib/site_perl/5.26.2/ && \
     ln -s ../../perl5/site_perl/5.22.0/* . 2>/dev/null || true
 
-# Add prokka to PATH
-ENV PATH="/opt/conda/envs/prokka_env/bin:${PATH}"
+# Add prokka to PATH but keep base conda Python first
+ENV PATH="/opt/conda/bin:/opt/conda/envs/prokka_env/bin:${PATH}"
 
+# Install pip packages into base environment
 RUN pip install pyyaml biopython
 
 # Run INSTALL.sh to set up fastGEAR and MATLAB runtime
 RUN bash INSTALL.sh
 
 # Make start_analysis.py executable
-RUN chmod +x start_analysis.py
+RUN chmod +x /BactPrep/start_analysis.py
 
-# Default command
-ENTRYPOINT ["python", "start_analysis.py"]
+# Default command using full path
+ENTRYPOINT ["python", "/BactPrep/start_analysis.py"]
