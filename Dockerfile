@@ -3,11 +3,13 @@ FROM continuumio/miniconda3:latest
 LABEL maintainer="biowizardhailey"
 LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
 
-# Install system dependencies including libncurses for fastGEAR
+# Install system dependencies and create legacy symlink for fastGEAR
 RUN apt-get update && apt-get install -y \
-    libncurses5-dev \
-    libncursesw5-dev \
-    && rm -rf /var/lib/apt/lists/*
+    libncurses6 \
+    libtinfo6 \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -s /usr/lib/x86_64-linux-gnu/libncurses.so.6 /usr/lib/x86_64-linux-gnu/libncurses.so.5 \
+    && ln -s /usr/lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/x86_64-linux-gnu/libtinfo.so.5
 
 # Set working directory
 WORKDIR /BactPrep
