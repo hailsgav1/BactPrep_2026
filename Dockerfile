@@ -3,6 +3,12 @@ FROM continuumio/miniconda3:latest
 LABEL maintainer="biowizardhailey"
 LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
 
+# Install system dependencies including libncurses for fastGEAR
+RUN apt-get update && apt-get install -y \
+    libncurses5 \
+    libncursesw5 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Set working directory
 WORKDIR /BactPrep
 
@@ -28,7 +34,6 @@ RUN cd /opt/conda/envs/prokka_env/lib/site_perl/5.26.2/ && \
 # Add prokka to PATH but keep base conda Python first
 ENV PATH="/opt/conda/bin:/opt/conda/envs/prokka_env/bin:${PATH}"
 
-# Install pip packages into base environment
 RUN pip install pyyaml biopython
 
 # Run INSTALL.sh to set up fastGEAR and MATLAB runtime
@@ -36,6 +41,9 @@ RUN bash INSTALL.sh
 
 # Make start_analysis.py executable
 RUN chmod +x /BactPrep/start_analysis.py
+
+# Handle tbl2asn expiration
+ENV tbl2asn="-no-warn"
 
 # Default command using full path
 ENTRYPOINT ["python", "/BactPrep/start_analysis.py"]
