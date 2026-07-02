@@ -7,6 +7,7 @@ LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
 RUN apt-get update && apt-get install -y \
     libncurses6 \
     libtinfo6 \
+    execstack \
     && rm -rf /var/lib/apt/lists/* \
     && ln -s /usr/lib/x86_64-linux-gnu/libncurses.so.6 /usr/lib/x86_64-linux-gnu/libncurses.so.5 \
     && ln -s /usr/lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/x86_64-linux-gnu/libtinfo.so.5
@@ -40,6 +41,9 @@ RUN pip install pyyaml biopython
 
 # Run INSTALL.sh to set up fastGEAR and MATLAB runtime
 RUN bash INSTALL.sh
+
+# Fix MATLAB MCR executable stack issue
+RUN find /BactPrep/resources/mcr/v901/ -name "*.so" -exec execstack -c {} \; 2>/dev/null || true
 
 # Make start_analysis.py executable
 RUN chmod +x /BactPrep/start_analysis.py
