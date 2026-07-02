@@ -5,8 +5,8 @@ LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
 
 # Install system dependencies including libncurses for fastGEAR
 RUN apt-get update && apt-get install -y \
-    libncurses5 \
-    libncursesw5 \
+    libncurses5-dev \
+    libncursesw5-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
