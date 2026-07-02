@@ -12,6 +12,11 @@ RUN apt-get update && apt-get install -y \
     && ln -s /usr/lib/x86_64-linux-gnu/libncurses.so.6 /usr/lib/x86_64-linux-gnu/libncurses.so.5 \
     && ln -s /usr/lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/x86_64-linux-gnu/libtinfo.so.5
 
+# Set MATLAB Java headless mode for HPC environments
+ENV MATLAB_JAVA_OPTIONS="-Djava.awt.headless=true"
+ENV XDG_RUNTIME_DIR=""
+ENV DISPLAY=""
+
 # Set working directory
 WORKDIR /BactPrep
 
