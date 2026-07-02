@@ -3,10 +3,11 @@ FROM continuumio/miniconda3:latest
 LABEL maintainer="biowizardhailey"
 LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
 
-# Install system dependencies and create legacy symlink for fastGEAR
+# Install system dependencies and patchelf for MATLAB MCR fix
 RUN apt-get update && apt-get install -y \
     libncurses6 \
     libtinfo6 \
+    patchelf \
     && rm -rf /var/lib/apt/lists/* \
     && ln -s /usr/lib/x86_64-linux-gnu/libncurses.so.6 /usr/lib/x86_64-linux-gnu/libncurses.so.5 \
     && ln -s /usr/lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/x86_64-linux-gnu/libtinfo.so.5
@@ -41,20 +42,9 @@ RUN pip install pyyaml biopython
 # Run INSTALL.sh to set up fastGEAR and MATLAB runtime
 RUN bash INSTALL.sh
 
-# Fix MATLAB MCR executable stack issue using Python
-RUN python3 -c "
-import glob, struct
-for f in glob.glob('/BactPrep/resources/mcr/v901/**/*.so', recursive=True):
-    try:
-        with open(f, 'r+b') as b:
-            data = b.read()
-            idx = data.find(b'\x01\x00\x00\x00\x06\x00\x00\x00')
-            if idx != -1:
-                b.seek(idx + 4)
-                b.write(struct.pack('<I', 6))
-    except:
-        pass
-" 2>/dev/null || true
+# Fix MATLAB MCR executable stack issue using patchelf
+RUN find /BactPrep/resources/mcr/v901/ -name "*.so" \
+    -exec patchelf --clear-execstack {} \; 2>/dev/null || true
 
 # Make start_analysis.py executable
 RUN chmod +x /BactPrep/start_analysis.py
