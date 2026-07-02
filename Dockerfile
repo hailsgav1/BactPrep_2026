@@ -4,10 +4,12 @@ LABEL maintainer="biowizardhailey"
 LABEL description="BactPrep - Bacterial Genome Preparation Pipeline"
 
 # Install system dependencies and create legacy symlink for fastGEAR
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y software-properties-common \
+    && add-apt-repository universe \
+    && apt-get update && apt-get install -y \
     libncurses6 \
     libtinfo6 \
-    prelink \
+    execstack \
     && rm -rf /var/lib/apt/lists/* \
     && ln -s /usr/lib/x86_64-linux-gnu/libncurses.so.6 /usr/lib/x86_64-linux-gnu/libncurses.so.5 \
     && ln -s /usr/lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/x86_64-linux-gnu/libtinfo.so.5
@@ -43,7 +45,7 @@ RUN pip install pyyaml biopython
 RUN bash INSTALL.sh
 
 # Fix MATLAB MCR executable stack issue
-RUN find /BactPrep/resources/mcr/v901/ -name "*.so" -exec prelink --undo {} \; 2>/dev/null || true
+RUN find /BactPrep/resources/mcr/v901/ -name "*.so" -exec execstack -c {} \; 2>/dev/null || true
 
 # Make start_analysis.py executable
 RUN chmod +x /BactPrep/start_analysis.py
